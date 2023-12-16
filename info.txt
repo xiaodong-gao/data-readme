@@ -1,0 +1,23 @@
+conda create --name=yolov8 python=3.10
+conda env remove -p 要删除的虚拟环境路径
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install ultralytics
+pip install labelme
+pip install labelme2yolo
+pip install label-studio
+
+from ultralytics import YOLO
+# Load a model
+model = YOLO('path/to/best.pt')  # load a custom trained model
+# Predict with the model
+results = model('./images',save=True,conf=0.1,iou=0.6)
+# Export the model
+model.export(format='onnx')
+# Train the model
+results = model.train(data='dataset.yaml', epochs=300, imgsz=640,device=0 ,workers = 1)
+results = model.train(cfg='./pcb.yaml',data='./datasets/', epochs=300, batch=64, imgsz=640)
+
+ .\Labelme.exe --labels .\Labelme.txt
+ .\labelImg.exe --label .\labelImg.txt
+trtexec --onnx=best.transd.onnx --saveEngine=best.engine --fp16
+labelme2yolo --json_dir ./ --val_size 0.1
